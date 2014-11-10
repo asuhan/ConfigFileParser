@@ -93,5 +93,5 @@ FLOAT
 
 /* Ignore white space */
 WS
-    :    { skip(); }
+    :    (' '|'\t'|'\f'|'\n'|'\r')+ { skip(); }
     ;
