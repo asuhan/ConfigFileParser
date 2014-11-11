@@ -27,7 +27,7 @@ scalar_value
     |    HEX
     |    HEX64
     |    FLOAT
-    |    STRING
+    |    STRING+
     ;
 
 scalar_value_list
