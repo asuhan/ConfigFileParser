@@ -51,8 +51,8 @@ BOOLEAN
     |    ('F'|'f')('A'|'a')('L'|'l')('S'|'s')('E'|'e')
     ;
 
-ESCAPE_SEQUENCE
-    :    '\\' '"'
+fragment ESCAPE_SEQUENCE
+    :    '\\' ('\\' | '"' | 't' | 'n' | 'r')
     ;
 
 STRING
