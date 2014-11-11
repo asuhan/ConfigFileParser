@@ -1,7 +1,20 @@
 grammar ConfigurationFile;
 
+options {
+    output=AST;
+}
+
+tokens {
+    KeyValue;
+    ValueList;
+    Array;
+    List;
+    Group;
+    Configuration;
+}
+
 configuration
-    :    setting_list
+    :    setting_list -> ^(Configuration setting_list)
     ;
 
 setting_list
@@ -9,7 +22,7 @@ setting_list
     ;
 
 setting
-    :    NAME (':' | '=') value (';' | ',')?
+    :    NAME (':' | '=') value (';' | ',')? -> ^(KeyValue NAME value)
     ;
 
 value
@@ -17,7 +30,7 @@ value
     ;
 
 value_list
-    :    value (',' value)*
+    :    value (',' value)* -> ^(ValueList value+)
     ;
 
 scalar_value
@@ -31,19 +44,19 @@ scalar_value
     ;
 
 scalar_value_list
-    :    scalar_value (',' scalar_value)*
+    :    scalar_value (',' scalar_value)* -> ^(ValueList scalar_value+)
     ;
 
 array
-    :    '[' scalar_value_list? ']'
+    :    '[' scalar_value_list? ']' -> ^(Array scalar_value_list?)
     ;
 
 list
-    :    '(' value_list? ')'
+    :    '(' value_list? ')' -> ^(List value_list?)
     ;
 
 group
-    :    '{' setting_list? '}'
+    :    '{' setting_list? '}' -> ^(Group setting_list?)
     ;
 
 BOOLEAN
