@@ -95,3 +95,7 @@ FLOAT
 WS
     :    (' '|'\t'|'\f'|'\n'|'\r')+ { skip(); }
     ;
+
+OL_COMMENT
+    :    '#' ~( '\r' | '\n' )* { skip(); }
+    ;
