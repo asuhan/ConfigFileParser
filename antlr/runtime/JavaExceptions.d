@@ -1,11 +1,37 @@
 module antlr.runtime.JavaExceptions;
 
-class RuntimeException: Exception {}
+class RuntimeException: Exception {
+    this() {
+        super("RuntimeException");
+    }
+}
 
-class IllegalArgumentException: Exception {}
+class IllegalArgumentException: Exception {
+    this() {
+        super("IllegalArgumentException");
+    }
+}
 
-class IllegalStateException: Exception {}
-class NoSuchElementException: Exception {}
-class NoSuchMethodError: Exception {}
-class UnsupportedOperationException: Exception {}
+class IllegalStateException: Exception {
+    this() {
+        super("IllegalStateException");
+    }
+}
 
+class NoSuchElementException: Exception {
+    this() {
+        super("NoSuchElementException");
+    }
+}
+
+class NoSuchMethodError: Exception {
+    this() {
+        super("NoSuchMethodError");
+    }
+}
+
+class UnsupportedOperationException: Exception {
+    this() {
+        super("UnsupportedOperationException");
+    }
+}
