@@ -114,7 +114,7 @@ public class BufferedTokenStream : TokenStream {
 
     public void seek(int index) { p = index; }
 
-    public int size() { return tokens.length; }
+    public int size() { return cast(int)tokens.length; }
 
     /** Move the input pointer to the next incoming token.  The stream
      *  must become active with LT(1) available.  consume() simply
@@ -131,7 +131,7 @@ public class BufferedTokenStream : TokenStream {
 
     /** Make sure index i in tokens has a token. */
     protected void sync(int i) {
-        int n = i - tokens.length + 1; // how many more elements we need?
+        int n = i - cast(int)tokens.length + 1; // how many more elements we need?
         //System.out.println("sync("+i+") needs "+n);
         if ( n > 0 ) fetch(n);
     }
@@ -140,7 +140,7 @@ public class BufferedTokenStream : TokenStream {
     protected void fetch(int n) {
         for (int i=1; i<=n; i++) {
             Token t = tokenSource.nextToken();
-            t.setTokenIndex(tokens.length);
+            t.setTokenIndex(cast(int)tokens.length);
             //System.out.println("adding "+t+" at index "+tokens.size());
             tokens~= t;
             if ( t.getType()==Token.EOF ) break;
@@ -159,7 +159,7 @@ public class BufferedTokenStream : TokenStream {
 		if ( start<0 || stop<0 ) return null;
 		if ( p == -1 ) setup();
 		Token[] subset ;// = new ArrayList();
-		if ( stop>=tokens.length ) stop = tokens.length-1;
+		if ( stop>=tokens.length ) stop = cast(int)tokens.length-1;
 		for (int i = start; i <= stop; i++) {
 			Token t = tokens[i];
 			if ( t.getType()==Token.EOF ) break;
@@ -238,7 +238,7 @@ public class BufferedTokenStream : TokenStream {
      */
     public Token[] getTokens(int start, int stop, BitSet types) {
         if ( p == -1 ) setup();
-        if ( stop>=tokens.length ) stop=tokens.length-1;
+        if ( stop>=tokens.length ) stop=cast(int)tokens.length-1;
         if ( start<0 ) start=0;
         if ( start>stop ) return null;
 
@@ -270,13 +270,13 @@ public class BufferedTokenStream : TokenStream {
     public string toString() {
         if ( p == -1 ) setup();
         fill();
-        return toString(0, tokens.length-1);
+        return toString(0, cast(int)tokens.length-1);
     }
 
     public string toString(int start, int stop) {
         if ( start<0 || stop<0 ) return null;
         if ( p == -1 ) setup();
-        if ( stop>=tokens.length ) stop = tokens.length-1;
+        if ( stop>=tokens.length ) stop = cast(int)tokens.length-1;
         auto buf = appender!string;// new StringBuffer();
         for (int i = start; i <= stop; i++) {
             Token t = tokens[i];

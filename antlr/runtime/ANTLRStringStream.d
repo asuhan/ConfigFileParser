@@ -76,7 +76,7 @@ public class ANTLRStringStream : CharStream {
 	public this(string input) {
 		this();
 		this.data = cast(char[])input;
-		this.n = input.length;
+		this.n = cast(int)input.length;
 	}
 
 	/** This is the preferred constructor as no data is copied */

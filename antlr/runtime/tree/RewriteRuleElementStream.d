@@ -200,7 +200,7 @@ public abstract class RewriteRuleElementStream {
 			n = 1;
 		}
 		if ( elements!=null ) {
-			return elements.length;
+			return cast(int)elements.length;
 		}
 		return n;
 	}

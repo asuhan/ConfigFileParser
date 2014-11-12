@@ -130,7 +130,7 @@ public class BitSet /*implements Cloneable*/ {
 	 * @param bit element that must fit in set
 	 */
 	public void growToInclude(int bit) {
-		int newSize = max(bits.length << 1, numWordsToHold(bit));
+		int newSize = max(cast(int)bits.length << 1, numWordsToHold(bit));
 		long newbits[] = new long[newSize];
 		newbits[]= bits[];//System.arraycopy(bits, 0, newbits, 0, bits.length);
 		bits = newbits;
@@ -142,9 +142,9 @@ public class BitSet /*implements Cloneable*/ {
 		}
 		// If this is smaller than a, grow this first
 		if (a.bits.length > bits.length) {
-			setSize(a.bits.length);
+			setSize(cast(int)a.bits.length);
 		}
-		int min = min(bits.length, a.bits.length);
+		int min = min(cast(int)bits.length, a.bits.length);
 		for (int i = min - 1; i >= 0; i--) {
 			bits[i] |= a.bits[i];
 		}
@@ -181,7 +181,7 @@ public class BitSet /*implements Cloneable*/ {
 
     public int size() {
         int deg = 0;
-        for (int i = bits.length - 1; i >= 0; i--) {
+        for (int i = cast(int)bits.length - 1; i >= 0; i--) {
             long word = bits[i];
             if (word != 0L) {
                 for (int bit = BITS - 1; bit >= 0; bit--) {
@@ -201,7 +201,7 @@ public class BitSet /*implements Cloneable*/ {
 
         BitSet otherSet = cast(BitSet)other;
 
-        int n = min(this.bits.length, otherSet.bits.length);
+        int n = min(cast(int)this.bits.length, otherSet.bits.length);
 
         // for any bits in common, compare
         for (int i=0; i<n; i++) {
@@ -248,7 +248,7 @@ public class BitSet /*implements Cloneable*/ {
 	}
 
     public bool isNil() {
-        for (int i = bits.length - 1; i >= 0; i--) {
+        for (int i = cast(int)bits.length - 1; i >= 0; i--) {
             if (bits[i] != 0) return false;
         }
         return true;
@@ -259,14 +259,14 @@ public class BitSet /*implements Cloneable*/ {
     }
 
     public int numBits() {
-        return bits.length << LOG_BITS; // num words * bits per word
+        return cast(int)bits.length << LOG_BITS; // num words * bits per word
     }
 
     /** return how much space is being used by the bits array not
      *  how many actually have member bits on.
      */
     public int lengthInLongWords() {
-        return bits.length;
+        return cast(int)bits.length;
     }
 
     /**Is this contained within a? */

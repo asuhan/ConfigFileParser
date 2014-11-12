@@ -70,7 +70,7 @@ public class ANTLRFileStream : ANTLRStringStream {
 		try {
 			data = cast(char[])read(fileName);//[size];
 			debug(antlrfilestream) writeln("Input source:",data);
-			super.n = data.length;
+			super.n = cast(int)data.length;
 		}
 		finally {
 			//fis.close();

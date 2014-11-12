@@ -85,7 +85,7 @@ public abstract class BaseTree : Tree {
 		if ( children==null ) {
 			return 0;
 		}
-		return children.length;
+		return cast(int)children.length;
 	}
 
 	/** Add t as child of this node.
@@ -108,13 +108,13 @@ public abstract class BaseTree : Tree {
 			// just add all of childTree's children to this
 			if ( childTree.children !is  null ) {
 				if ( this.children !is null ) { // must copy, this has children already
-					int n = childTree.children.length;
+					int n = cast(int)childTree.children.length;
 					for (int i = 0; i < n; i++) {
 						Tree c = cast(Tree)childTree.children[i];
 						this.children~=c;
 						// handle double-link stuff for each child of nil root
 						c.setParent(this);
-						c.setChildIndex(children.length-1);
+						c.setChildIndex(cast(int)children.length-1);
 					}
 				}
 				else {
@@ -131,7 +131,7 @@ public abstract class BaseTree : Tree {
 			}
 			children~=t;
 			childTree.setParent(this);
-			childTree.setChildIndex(children.length-1);
+			childTree.setChildIndex(cast(int)children.length-1);
 		}
 		// System.out.println("now children are: "+children);
 	}
@@ -210,8 +210,8 @@ public abstract class BaseTree : Tree {
 			//newChildren = new ArrayList(1);
 			newChildren~=newTree;
 		}
-		replacingWithHowMany = newChildren.length;
-		int numNewChildren = newChildren.length;
+		replacingWithHowMany = cast(int)newChildren.length;
+		int numNewChildren = cast(int)newChildren.length;
 		int delta = replacingHowMany - replacingWithHowMany;
 		// if same number of nodes, do direct replace
 		if ( delta == 0 ) {
