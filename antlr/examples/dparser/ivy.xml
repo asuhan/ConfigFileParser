@@ -1,0 +1,10 @@
+
+<ivy-module version="2.0">
+    <info organisation="org.apache" module="antlrgen"/>
+    <dependencies>
+<!--        <dependency org="org.antlr" name="antlr" rev="3.3"/>-->
+<!--        <dependency org="org.antlr" name="antlr-runtime" rev="3.3"/>-->
+        <dependency org="org.antlr" name="antlr" rev="3.4"/>
+<!--        <dependency org="org.antlr" name="antlr3-maven-plugin" rev="3.3"/>-->
+    </dependencies>
+</ivy-module>

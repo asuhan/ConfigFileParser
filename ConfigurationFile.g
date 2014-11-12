@@ -2,6 +2,7 @@ grammar ConfigurationFile;
 
 options {
     output=AST;
+    language=D;
 }
 
 tokens {
