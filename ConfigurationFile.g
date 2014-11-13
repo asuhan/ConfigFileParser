@@ -11,6 +11,7 @@ tokens {
     Array;
     List;
     Group;
+    String;
     Configuration;
 }
 
@@ -41,7 +42,7 @@ scalar_value
     |    HEX
     |    HEX64
     |    FLOAT
-    |    STRING+
+    |    STRING+ -> ^(String STRING+)
     ;
 
 scalar_value_list
