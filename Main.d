@@ -4,12 +4,13 @@ import antlr.runtime.ANTLRStringStream;
 import antlr.runtime.ANTLRFileStream;
 import antlr.runtime.CharStream;
 import antlr.runtime.CommonTokenStream;
+import antlr.runtime.tree.CommonTree;
 
 import ConfigurationFileLexer, ConfigurationFileParser;
 
-import std.stdio;
-import antlr.runtime.tree.CommonTree;
 import std.array;
+import std.conv;
+import std.stdio;
 import std.string;
 import std.variant;
 
@@ -109,7 +110,35 @@ Variant config_lookup(const Variant config, const string path) {
   return result;
 }
 
+int config_lookup_int(const Variant config, const string path) {
+  // TODO: parse on config init
+  return to!int(config_lookup(config, path).get!(string));
+}
+
+long config_lookup_int64(const Variant config, const string path) {
+  // TODO: parse on config init
+  auto long_str = config_lookup(config, path).get!(string);
+  for (auto i = 0; i < 2; ++i) {
+    if (long_str[$-1] == 'L') {
+      long_str = long_str[0..$-1];
+    }
+  }
+  return to!long(long_str);
+}
+
+bool config_lookup_bool(const Variant config, const string path) {
+  return config_lookup(config, path).get!(bool);
+}
+
+string config_lookup_string(const Variant config, const string path) {
+  return config_lookup(config, path).get!(string);
+}
+
 void main(string[] args) {
   auto config = config_read_file(args[1]);
   writeln(config_lookup(config, "application.window.size.h"));
+  writeln(config_lookup_int(config, "misc.port"));
+  writeln(config_lookup_int64(config, "misc.bigint"));
+  writeln(config_lookup_bool(config, "misc.enabled"));
+  writeln(config_lookup_string(config, "misc.unicode"));
 }
