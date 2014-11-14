@@ -110,8 +110,9 @@ Variant config_lookup(const Variant config, const string path) {
   return result;
 }
 
-Variant config_setting_get_member(const Variant setting, const string name) {
-  return config_lookup(setting, name);
+string config_setting_get_string(const Variant setting) {
+  Variant setting_copy = setting;
+  return setting_copy.get!(string);
 }
 
 int config_lookup_int(const Variant config, const string path) {
@@ -138,13 +139,13 @@ string config_lookup_string(const Variant config, const string path) {
   return config_lookup(config, path).get!(string);
 }
 
-bool config_setting_is_group(const Variant config) {
-  return config.type == typeid(Variant[string]);
+Variant config_setting_get_elem(const Variant setting, uint index) {
+  Variant setting_copy = setting;
+  return setting_copy[index];
 }
 
-string config_setting_get_string(const Variant setting) {
-  Variant setting_copy = setting;
-  return setting_copy.get!(string);
+Variant config_setting_get_member(const Variant setting, const string name) {
+  return config_lookup(setting, name);
 }
 
 ulong config_setting_length(const Variant setting) {
@@ -152,9 +153,8 @@ ulong config_setting_length(const Variant setting) {
   return setting_copy.length;
 }
 
-Variant config_setting_get_elem(const Variant setting, uint index) {
-  Variant setting_copy = setting;
-  return setting_copy[index];
+bool config_setting_is_group(const Variant config) {
+  return config.type == typeid(Variant[string]);
 }
 
 void main(string[] args) {
