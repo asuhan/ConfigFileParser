@@ -2,6 +2,7 @@ module runparser;
 
 import antlr.runtime.ANTLRStringStream;
 import antlr.runtime.ANTLRFileStream;
+import antlr.runtime.CharStream;
 import antlr.runtime.CommonTokenStream;
 
 import ConfigurationFileLexer, ConfigurationFileParser;
@@ -12,7 +13,7 @@ import std.array;
 import std.string;
 import std.variant;
 
-Variant astToValue(CommonTree value, ConfigurationFileLexer lexer) {
+Variant astToValue(CommonTree value, const ConfigurationFileLexer lexer) {
   Variant dict;
 
   switch (value.token.getType()) {
@@ -83,13 +84,32 @@ Variant astToValue(CommonTree value, ConfigurationFileLexer lexer) {
   return dict;
 }
 
-void main(string[] args) {
-  ANTLRStringStream ins;
-  assert(args.length > 1);
-  ins = new ANTLRFileStream(args[1]);
+Variant config_read_stream(CharStream ins) {
   auto lexer = new ConfigurationFileLexer(ins);
-  CommonTokenStream tokens = new CommonTokenStream(lexer);
+  auto tokens = new CommonTokenStream(lexer);
   auto parser = new ConfigurationFileParser(tokens);
   auto res = parser.configuration();
-  writeln(astToValue(cast(CommonTree)res.getTree(), lexer));
+  return astToValue(cast(CommonTree)res.getTree(), lexer);
+}
+
+Variant config_read_file(const string filename) {
+  return config_read_stream(new ANTLRFileStream(filename));
+}
+
+Variant config_read_string(const string str) {
+  return config_read_stream(new ANTLRStringStream(str));
+}
+
+Variant config_lookup(const Variant config, const string path) {
+  auto path_nodes = path.split('.');
+  Variant result = config;
+  foreach (string path_node; path_nodes) {
+    result = result[path_node];
+  }
+  return result;
+}
+
+void main(string[] args) {
+  auto config = config_read_file(args[1]);
+  writeln(config_lookup(config, "application.window.size.h"));
 }
