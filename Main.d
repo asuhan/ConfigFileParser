@@ -110,6 +110,10 @@ Variant config_lookup(const Variant config, const string path) {
   return result;
 }
 
+Variant config_setting_get_member(const Variant setting, const string name) {
+  return config_lookup(setting, name);
+}
+
 int config_lookup_int(const Variant config, const string path) {
   // TODO: parse on config init
   return to!int(config_lookup(config, path).get!(string));
@@ -134,11 +138,41 @@ string config_lookup_string(const Variant config, const string path) {
   return config_lookup(config, path).get!(string);
 }
 
+bool config_setting_is_group(const Variant config) {
+  return config.type == typeid(Variant[string]);
+}
+
+string config_setting_get_string(const Variant setting) {
+  Variant setting_copy = setting;
+  return setting_copy.get!(string);
+}
+
+ulong config_setting_length(const Variant setting) {
+  Variant setting_copy = setting;
+  return setting_copy.length;
+}
+
+Variant config_setting_get_elem(const Variant setting, uint index) {
+  Variant setting_copy = setting;
+  return setting_copy[index];
+}
+
 void main(string[] args) {
   auto config = config_read_file(args[1]);
   writeln(config_lookup(config, "application.window.size.h"));
+  writeln(config_setting_get_member(
+    config_lookup(config, "application.window.size"), "h"));
   writeln(config_lookup_int(config, "misc.port"));
   writeln(config_lookup_int64(config, "misc.bigint"));
   writeln(config_lookup_bool(config, "misc.enabled"));
   writeln(config_lookup_string(config, "misc.unicode"));
+  writeln(config_setting_is_group(config_lookup(config, "application")));
+  writeln(config_setting_is_group(config_lookup(config, "application.window")));
+  writeln(config_setting_is_group(
+    config_lookup(config, "application.window.title")));
+  auto lst = config_lookup(config, "list");
+  writeln(config_setting_length(lst));
+  writeln(config_setting_get_elem(lst, 1));
+  auto books = config_lookup(config, "books");
+  writeln(config_setting_get_string(config_setting_get_elem(books, 0)));
 }
