@@ -110,6 +110,32 @@ Variant config_lookup(const Variant config, const string path) {
   return result;
 }
 
+int config_setting_get_int(const Variant setting) {
+  Variant setting_copy = setting;
+  return to!int(setting_copy.get!(string));
+}
+
+long config_setting_get_int64(const Variant setting) {
+  Variant setting_copy = setting;
+  auto long_str = setting_copy.get!(string);
+  for (auto i = 0; i < 2; ++i) {
+    if (long_str[$-1] == 'L') {
+      long_str = long_str[0..$-1];
+    }
+  }
+  return to!long(long_str);
+}
+
+double config_setting_get_float(const Variant setting) {
+  Variant setting_copy = setting;
+  return setting_copy.get!(double);
+}
+
+bool config_setting_get_bool(const Variant setting) {
+  Variant setting_copy = setting;
+  return setting_copy.get!(bool);
+}
+
 string config_setting_get_string(const Variant setting) {
   Variant setting_copy = setting;
   return setting_copy.get!(string);
@@ -175,4 +201,12 @@ void main(string[] args) {
   writeln(config_setting_get_elem(lst, 1));
   auto books = config_lookup(config, "books");
   writeln(config_setting_get_string(config_setting_get_elem(books, 0)));
+  writeln(config_setting_get_int(config_lookup(config,
+    "application.a")));
+  writeln(config_setting_get_int64(config_lookup(config,
+    "misc.bigint")));
+  writeln(config_setting_get_float(config_lookup(config,
+    "misc.pi")));
+  writeln(config_setting_get_bool(config_lookup(config,
+    "application.group1.flag")));
 }
