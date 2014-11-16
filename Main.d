@@ -101,6 +101,34 @@ Variant config_read_string(const string str) {
   return config_read_stream(new ANTLRStringStream(str));
 }
 
+int config_lookup_int(const Variant config, const string path) {
+  // TODO: parse on config init
+  return to!int(config_lookup(config, path).get!(string));
+}
+
+long config_lookup_int64(const Variant config, const string path) {
+  // TODO: parse on config init
+  auto long_str = config_lookup(config, path).get!(string);
+  for (auto i = 0; i < 2; ++i) {
+    if (long_str[$-1] == 'L') {
+      long_str = long_str[0..$-1];
+    }
+  }
+  return to!long(long_str);
+}
+
+double config_lookup_float(const Variant config, const string path) {
+  return config_lookup(config, path).get!(double);
+}
+
+bool config_lookup_bool(const Variant config, const string path) {
+  return config_lookup(config, path).get!(bool);
+}
+
+string config_lookup_string(const Variant config, const string path) {
+  return config_lookup(config, path).get!(string);
+}
+
 Variant config_lookup(const Variant config, const string path) {
   auto path_nodes = path.split('.');
   Variant result = config;
@@ -141,28 +169,28 @@ string config_setting_get_string(const Variant setting) {
   return setting_copy.get!(string);
 }
 
-int config_lookup_int(const Variant config, const string path) {
-  // TODO: parse on config init
-  return to!int(config_lookup(config, path).get!(string));
+int config_setting_lookup_int(const Variant setting, const string name) {
+  return config_lookup_int(setting, name);
 }
 
-long config_lookup_int64(const Variant config, const string path) {
-  // TODO: parse on config init
-  auto long_str = config_lookup(config, path).get!(string);
-  for (auto i = 0; i < 2; ++i) {
-    if (long_str[$-1] == 'L') {
-      long_str = long_str[0..$-1];
-    }
-  }
-  return to!long(long_str);
+long config_setting_lookup_int64(const Variant setting, const string name) {
+  return config_lookup_int64(setting, name);
 }
 
-bool config_lookup_bool(const Variant config, const string path) {
-  return config_lookup(config, path).get!(bool);
+double config_setting_lookup_float(const Variant setting, const string name) {
+  return config_lookup_float(setting, name);
 }
 
-string config_lookup_string(const Variant config, const string path) {
-  return config_lookup(config, path).get!(string);
+bool config_setting_lookup_bool(const Variant setting, const string name) {
+  return config_lookup_bool(setting, name);
+}
+
+string config_setting_lookup_string(const Variant setting, const string name) {
+  return config_lookup_string(setting, name);
+}
+
+Variant config_setting_get_member(const Variant setting, const string name) {
+  return config_lookup(setting, name);
 }
 
 Variant config_setting_get_elem(const Variant setting, uint index) {
@@ -170,8 +198,24 @@ Variant config_setting_get_elem(const Variant setting, uint index) {
   return setting_copy[index];
 }
 
-Variant config_setting_get_member(const Variant setting, const string name) {
-  return config_lookup(setting, name);
+int config_setting_get_int_elem(const Variant setting, uint index) {
+  return config_setting_get_int(config_setting_get_elem(setting, index));
+}
+
+long config_setting_get_int64_elem(const Variant setting, uint index) {
+  return config_setting_get_int64(config_setting_get_elem(setting, index));
+}
+
+double config_setting_get_float_elem(const Variant setting, uint index) {
+  return config_setting_get_float(config_setting_get_elem(setting, index));
+}
+
+bool config_setting_get_bool_elem(const Variant setting, uint index) {
+  return config_setting_get_bool(config_setting_get_elem(setting, index));
+}
+
+string config_setting_get_string_elem(const Variant setting, uint index) {
+  return config_setting_get_string(config_setting_get_elem(setting, index));
 }
 
 ulong config_setting_length(const Variant setting) {
@@ -190,6 +234,7 @@ void main(string[] args) {
     config_lookup(config, "application.window.size"), "h"));
   writeln(config_lookup_int(config, "misc.port"));
   writeln(config_lookup_int64(config, "misc.bigint"));
+  writeln(config_lookup_float(config, "misc.pi"));
   writeln(config_lookup_bool(config, "misc.enabled"));
   writeln(config_lookup_string(config, "misc.unicode"));
   writeln(config_setting_is_group(config_lookup(config, "application")));
@@ -209,4 +254,10 @@ void main(string[] args) {
     "misc.pi")));
   writeln(config_setting_get_bool(config_lookup(config,
     "application.group1.flag")));
+  writeln(config_setting_lookup_int(config_lookup(config, "misc"), "port"));
+  writeln(config_setting_lookup_int64(config_lookup(config, "misc"), "bigint"));
+  writeln(config_setting_lookup_float(config_lookup(config, "misc"), "pi"));
+  writeln(config_setting_lookup_bool(config_lookup(config, "misc"), "enabled"));
+  writeln(config_setting_lookup_string(config_lookup(config, "misc"), "unicode"));
+  writeln(config_setting_get_string_elem(config_lookup(config, "application.group1.states"), 1));
 }
