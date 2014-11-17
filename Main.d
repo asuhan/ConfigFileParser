@@ -223,8 +223,37 @@ ulong config_setting_length(const Variant setting) {
   return setting_copy.length;
 }
 
-bool config_setting_is_group(const Variant config) {
-  return config.type == typeid(Variant[string]);
+bool config_setting_is_group(const Variant setting) {
+  return setting.type == typeid(Variant[string]);
+}
+
+bool config_setting_is_array(const Variant setting) {
+  return setting.type == typeid(Variant[]);
+}
+
+// TODO(alex): list and array should be different
+bool config_setting_is_list(const Variant setting) {
+  return setting.type == typeid(Variant[]);
+}
+
+bool config_setting_is_aggregate(const Variant setting) {
+  return config_setting_is_group(setting) ||
+         config_setting_is_array(setting) ||
+         config_setting_is_list(setting);
+}
+
+bool config_setting_is_scalar(const Variant setting) {
+  return setting.type == typeid(int) ||
+         setting.type == typeid(long) ||
+         setting.type == typeid(double) ||
+         setting.type == typeid(bool) ||
+         setting.type == typeid(string);
+}
+
+bool config_setting_is_number(const Variant setting) {
+  return setting.type == typeid(int) ||
+         setting.type == typeid(long) ||
+         setting.type == typeid(double);
 }
 
 void main(string[] args) {
